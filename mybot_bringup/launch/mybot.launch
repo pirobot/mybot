@@ -1,0 +1,14 @@
+<launch>
+
+   <include file="$(find mybot_bringup)/launch/cmd_vel_mux.launch" />
+
+   <node name="arduino" pkg="ros_arduino_python" type="arduino_node.py" output="screen" clear_params="true">
+      <rosparam file="$(find mybot_bringup)/config/mybot_arduino.yaml" command="load" />
+   </node>
+   
+  <!-- Aggregate diagnostics data -->
+  <node pkg="diagnostic_aggregator" type="aggregator_node" name="diagnostic_aggregator" clear_params="true">
+    <rosparam command="load" file="$(find mybot_bringup)/config/base_with_sensors_diagnostics.yaml" />
+  </node>
+  
+</launch>

@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- env name="GAZEBO_MODEL_PATH" value="$(find mybot_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)" /-->
+
+    <arg name="limited" default="false"/>
+    <arg name="paused"  default="false"/>
+    <arg name="gui"     default="true"/>
+    <arg name="world"   default="worlds/empty.world"/>
+    <arg name="x"       default="0.0"/>
+    <arg name="y"       default="0.0"/>
+    <arg name="z"       default="0.0"/>
+    <arg name="yaw"     default="0.0"/>
+    
+    <param name="use_sim_time" value="true" />
+    
+	<!-- Send robot urdf to param server -->
+	<param name="robot_description" command="$(find xacro)/xacro --inorder '$(find mybot_description)/urdf/mybot.urdf.xacro'" />
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen">
+        <param name="publish_frequency" type="double" value="100.0" />
+        <param name="tf_prefix" value=""/>
+    </node>
+
+    <!-- Startup simulated world -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(arg world)"/>
+        <arg name="paused"     value="$(arg paused)"/>
+        <arg name="gui"        value="$(arg gui)"/>
+        <arg name="debug"      value="false" />
+    </include>
+
+    <!-- Push robot_description to factory and spawn robot in gazebo -->
+    <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model mybot -x $(arg x) -y $(arg y) -z $(arg z) -Y $(arg yaw)" respawn="false" output="screen" />
+
+    <!-- Controller spawners -->
+    <include file="$(find mybot_gazebo)/launch/spawn_controllers.launch" />
+
+    <!-- Bring up the cmd_vel_mux node -->
+    <include file="$(find mybot_bringup)/launch/cmd_vel_mux.launch" />
+    
+    <!-- node name="sim_start_patch" pkg="mybot_gazebo" type="sim_start_patch" output="screen" /-->
+
+</launch>

@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+
+<robot name="robot" xmlns:xacro="http://ros.org/wiki/xacro">
+
+   <!-- Include all component files -->
+   <xacro:include filename="$(find mybot_description)/urdf/materials.urdf.xacro" />
+   <xacro:include filename="$(find mybot_description)/urdf/base.urdf.xacro" />
+   <xacro:include filename="$(find mybot_description)/urdf/sensors.urdf.xacro" />
+   
+   <!-- Add the base and wheels -->
+   <base name="base" color="DarkGrey"/>
+  
+   <!-- Add the drive wheels -->
+   <xacro:wheel wheel_prefix="left" parent="base_chassis_link" rotation="${-PI/2}">
+      <origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0" />
+   </xacro:wheel>
+   
+   <xacro:wheel wheel_prefix="right" parent="base_chassis_link" rotation="${PI/2}">
+      <origin xyz="${wheel_offset_x} ${-wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0" />
+   </xacro:wheel>
+   
+   <!-- Add a rear caster -->
+   <xacro:caster parent="base" prefix="center" color="White"/>
+   
+   <!-- Add the sensors -->
+   <sensors/>
+   
+   <gazebo>
+      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+         <robotNamespace>/</robotNamespace>
+       </plugin>
+	
+	  <plugin filename="libgazebo_ros_p3d.so" name="gazebo_ros_p3d">
+	    <bodyName>base_link</bodyName>
+	    <topicName>ground_truth_odom</topicName>
+	    <alwaysOn>true</alwaysOn>
+	    <updateRate>100.0</updateRate>
+	  </plugin>
+	
+	<plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+	    <legacyMode>false</legacyMode>
+	    <alwaysOn>true</alwaysOn>
+	    <updateRate>100</updateRate>
+   	    <leftJoint>left_wheel_joint</leftJoint>
+	    <rightJoint>right_wheel_joint</rightJoint>
+	    <wheelSeparation>0.19</wheelSeparation>
+	    <wheelDiameter>0.088</wheelDiameter>
+	    <wheelAcceleration>0.0</wheelAcceleration>
+	    <wheelTorque>1.0</wheelTorque>
+	    <commandTopic>cmd_vel</commandTopic>
+	    <odometryTopic>odom</odometryTopic>
+	    <odometryFrame>odom</odometryFrame>
+	    <robotBaseFrame>base_link</robotBaseFrame>
+	    <publishOdomTF>true</publishOdomTF>
+	    <wheelAcceleration>0</wheelAcceleration>
+	    <wheelTorque>100</wheelTorque>
+	    <publishTf>1</publishTf>
+	    <publishWheelTF>false</publishWheelTF>
+	    <publishWheelJointState>true</publishWheelJointState>
+	    <odometrySource>encoder</odometrySource>
+	  </plugin>
+    </gazebo>
+
+</robot>

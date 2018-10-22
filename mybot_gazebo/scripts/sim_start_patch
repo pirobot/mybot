@@ -1,0 +1,83 @@
+#!/usr/bin/env python
+"""--------------------------------------------------------------------
+COPYRIGHT 2016 Stanley Innovation Inc.
+
+Software License Agreement:
+
+The software supplied herewith by Stanley Innovation Inc. (the "Company") 
+for its licensed SI Vector Platform is intended and supplied to you, 
+the Company's customer, for use solely and exclusively with Stanley Innovation 
+products. The software is owned by the Company and/or its supplier, and is 
+protected under applicable copyright laws.  All rights are reserved. Any use in 
+violation of the foregoing restrictions may subject the user to criminal 
+sanctions under applicable laws, as well as to civil liability for the 
+breach of the terms and conditions of this license. The Company may 
+immediately terminate this Agreement upon your use of the software with 
+any products that are not Stanley Innovation products.
+
+The software was written using Python programming language.  Your use 
+of the software is therefore subject to the terms and conditions of the 
+OSI- approved open source license viewable at http://www.python.org/.  
+You are solely responsible for ensuring your compliance with the Python 
+open source license.
+
+You shall indemnify, defend and hold the Company harmless from any claims, 
+demands, liabilities or expenses, including reasonable attorneys fees, incurred 
+by the Company as a result of any claim or proceeding against the Company 
+arising out of or based upon: 
+
+(i) The combination, operation or use of the software by you with any hardware, 
+    products, programs or data not supplied or approved in writing by the Company, 
+    if such claim or proceeding would have been avoided but for such combination, 
+    operation or use.
+ 
+(ii) The modification of the software by or on behalf of you 
+
+(iii) Your use of the software.
+
+ THIS SOFTWARE IS PROVIDED IN AN "AS IS" CONDITION. NO WARRANTIES,
+ WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED
+ TO, IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ PARTICULAR PURPOSE APPLY TO THIS SOFTWARE. THE COMPANY SHALL NOT,
+ IN ANY CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL OR
+ CONSEQUENTIAL DAMAGES, FOR ANY REASON WHATSOEVER.
+ 
+ \file   init_sim.py
+
+ \brief  This node serves to setup simulation 
+
+ \Platform: Linux/ROS Indigo
+--------------------------------------------------------------------"""
+import rospy
+from gazebo_msgs.msg import ModelStates
+from control_msgs.msg import JointTrajectoryControllerState
+from controller_manager_msgs.srv import SwitchController, SwitchControllerRequest
+from std_srvs.srv import Empty
+import time
+
+
+if __name__ == "__main__":
+    rospy.init_node('sim_start_patch')
+        
+    # wait until the controllers and gazebo is up and running
+    rospy.wait_for_service('/gazebo/unpause_physics')
+    rospy.wait_for_service('/controller_manager/switch_controller')
+    time.sleep(2)
+    
+    try:
+        unpause_physics = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
+        unpause_physics()
+        
+        switch_controller = rospy.ServiceProxy('/controller_manager/switch_controller', SwitchController)
+        switch_req = SwitchControllerRequest()
+        switch_req.start_controllers = ['joint_state_controller']
+        
+        switch_req.strictness = SwitchControllerRequest.STRICT
+        
+        res = switch_controller(switch_req)
+        if not res.ok:
+            raise rospy.logerr("Switch controllers failed!")
+        
+    except rospy.ServiceException, e:
+        rospy.logerr("Service call failed: %s"%e)
+

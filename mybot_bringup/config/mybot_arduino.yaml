@@ -1,0 +1,48 @@
+port: /dev/arduino
+baud: 57600
+timeout: 0.5
+
+rate: 50
+sensorstate_rate: 10
+
+# Are we using the base controller?
+use_base_controller: True
+
+# Base controller update rate in Hz
+base_controller_rate: 10
+
+# Frame ID for the robot's base frame
+base_frame: base_footprint
+
+# === Robot drivetrain parameters
+wheel_diameter: 0.09
+wheel_track: 0.21
+encoder_resolution: 6533 # from Pololu for 100:1 motors
+gear_reduction: 1.0
+motors_reversed: False
+accel_limit: 1.0
+
+# === PID parameters
+Kp: 10
+Kd: 12
+Ki: 0
+Ko: 50
+
+sensors: {
+  #motor_current_left:   {pin: 0, type: PololuMotorCurrent, rate: 5},
+  #motor_current_right:  {pin: 1, type: PololuMotorCurrent, rate: 5},
+  ir_front_center:      {pin: 0, type: GP2D12, rate: 5},
+  sonar_front_left:   {pin: 3, type: Ping, rate: 5},
+  sonar_front_center:   {pin: 5, type: Ping, rate: 5},
+  sonar_front_right:   {pin: 6, type: Ping, rate: 5},
+  sonar_rear_left:   {pin: 4, type: Ping, rate: 5},
+  sonar_rear_center:   {pin: 7, type: Ping, rate: 5},
+  sonar_rear_right:   {pin: 2, type: Ping, rate: 5}
+  #onboard_led:           {pin: 13, type: Digital, rate: 5, direction: output}
+}
+
+# Joint name and configuration is an example only
+#joints: {
+#    head_pan_joint: {pin: 3, init_position: 0, init_speed: 90, neutral: 90, min_position: -90, max_position: 90, invert: False, continuous: False},
+#    head_tilt_joint: {pin: 5, init_position: 0, init_speed: 90, neutral: 90, min_position: -90, max_position: 90, invert: False, continuous: False}
+#}
