@@ -1,0 +1,15 @@
+<launch>
+
+  <param name="use_sim_time" value="true" />
+
+  <arg name="bagfile"                 default="" />
+  <arg name="rate"                    default="1" />
+  <arg name="loop"                    default="" />
+  <arg name="start"                   default="0" />
+  <arg name="pause"                   default="" />
+
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find mybot_description)/urdf/mybot.urdf.xacro'" />
+
+  <node pkg="rosbag" name="rosbag_play" type="play" args="--clock $(arg loop) --start=$(arg start) --rate=$(arg rate) $(arg pause) $(arg bagfile)" clear_params="true" output="screen"/>
+
+</launch>

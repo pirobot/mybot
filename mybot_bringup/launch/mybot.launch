@@ -1,11 +1,24 @@
 <launch>
 
+   <param name="use_sim_time" value="false" />
+ 
+   <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find mybot_description)/urdf/mybot.urdf.xacro'" />
+
    <include file="$(find mybot_bringup)/launch/cmd_vel_mux.launch" />
 
    <node name="arduino" pkg="ros_arduino_python" type="arduino_node.py" output="screen" clear_params="true">
       <rosparam file="$(find mybot_bringup)/config/mybot_arduino.yaml" command="load" />
    </node>
    
+   <node pkg="mybot_bringup" name="fake_wheel_pub" type="fake_wheel_pub.py" output="screen" clear_params="true" />
+   
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen">
+        <param name="publish_frequency" type="double" value="100.0" />
+        <param name="tf_prefix" value=""/>
+    </node>
+   
+   <include file="$(find mybot_bringup)/launch/logitech_teleop.launch" />
+
   <!-- Aggregate diagnostics data -->
   <node pkg="diagnostic_aggregator" type="aggregator_node" name="diagnostic_aggregator" clear_params="true">
     <rosparam command="load" file="$(find mybot_bringup)/config/base_with_sensors_diagnostics.yaml" />

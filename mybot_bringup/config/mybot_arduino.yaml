@@ -31,13 +31,13 @@ Ko: 50
 sensors: {
   #motor_current_left:   {pin: 0, type: PololuMotorCurrent, rate: 5},
   #motor_current_right:  {pin: 1, type: PololuMotorCurrent, rate: 5},
-  ir_front_center:      {pin: 0, type: GP2D12, rate: 5},
-  sonar_front_left:   {pin: 3, type: Ping, rate: 5},
-  sonar_front_center:   {pin: 5, type: Ping, rate: 5},
-  sonar_front_right:   {pin: 6, type: Ping, rate: 5},
-  sonar_rear_left:   {pin: 4, type: Ping, rate: 5},
-  sonar_rear_center:   {pin: 7, type: Ping, rate: 5},
-  sonar_rear_right:   {pin: 2, type: Ping, rate: 5}
+  ir_front_center:      {pin: 0, type: GP2D12, rate: 5, frame_id: ir_front_center},
+  sonar_front_left:   {pin: 3, type: Ping, rate: 5, frame_id: sonar_front_left},
+  sonar_front_center:   {pin: 5, type: Ping, rate: 5, frame_id: sonar_front_center},
+  sonar_front_right:   {pin: 6, type: Ping, rate: 5, frame_id: sonar_front_right},
+  sonar_rear_left:   {pin: 4, type: Ping, rate: 5, frame_id: sonar_rear_left},
+  sonar_rear_center:   {pin: 7, type: Ping, rate: 5, frame_id: sonar_rear_center},
+  sonar_rear_right:   {pin: 2, type: Ping, rate: 5, frame_id: sonar_rear_right}
   #onboard_led:           {pin: 13, type: Digital, rate: 5, direction: output}
 }
 

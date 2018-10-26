@@ -70,6 +70,94 @@
       <child link="sonar_front_right"/>
     </joint>
     
+   <link name="sonar_rear_left">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.01 0.03 0.01" />
+        </geometry>
+      </visual>
+      
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.01 0.03 0.01" />
+        </geometry>
+      </collision>
+   </link>
+   
+   <joint name="sonar_rear_left" type="fixed">
+      <origin xyz="${-base_size_x/2 + 0.01} ${base_size_y/2 + 0.01} 0" rpy="0 0 ${3*PI/4}" />
+      <parent link="base_link"/>
+      <child link="sonar_rear_left"/>
+    </joint>
+    
+   <link name="sonar_rear_center">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.01 0.03 0.01" />
+        </geometry>
+      </visual>
+      
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.01 0.03 0.01" />
+        </geometry>
+      </collision>
+   </link>
+   
+   <joint name="sonar_rear_center" type="fixed">
+      <origin xyz="${-base_size_x/2 - 0.01} 0 0" rpy="0 0 ${PI}" />
+      <parent link="base_link"/>
+      <child link="sonar_rear_center"/>
+    </joint>
+    
+   <link name="sonar_rear_right">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.01 0.03 0.01" />
+        </geometry>
+      </visual>
+      
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.01 0.03 0.01" />
+        </geometry>
+      </collision>
+   </link>
+   
+   <joint name="sonar_rear_right" type="fixed">
+      <origin xyz="${-base_size_x/2 + 0.01} ${-base_size_y/2 - 0.01} 0" rpy="0 0 ${-3*PI/4}" />
+      <parent link="base_link"/>
+      <child link="sonar_rear_right"/>
+    </joint>
+    
+  <link name="ir_front_center">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.01 0.03 0.01" />
+        </geometry>
+      </visual>
+      
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.01 0.03 0.01" />
+        </geometry>
+      </collision>
+   </link>
+   
+   <joint name="ir_front_center" type="fixed">
+      <origin xyz="${base_size_x/2 + 0.01} 0 0" rpy="0 0 0" />
+      <parent link="base_link"/>
+      <child link="ir_front_center"/>
+    </joint>
+    
    <gazebo reference="sonar_front_center">
 	    <sensor type="ray" name="sonar_front_center_sensor">
 	      <pose>0 0 0 0 0 0</pose>

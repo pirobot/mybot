@@ -28,6 +28,14 @@
 
   <!-- The base xacro macro -->
   <xacro:macro name="base" params="name color">
+  
+     <link name="base_footprint" />
+     <joint name="base_footprint_joint" type="fixed">
+         <origin xyz="0 0 0" rpy="0 0 0" />
+         <parent link="base_footprint" />
+         <child link="base_link" />
+     </joint>
+     
      <!-- Base link is the center of the robot's chassis between the motors projected on the ground -->
      <link name="base_link"/>
 
